@@ -15,4 +15,4 @@ The script attempts to remove files and folders that obey some simple naming con
 
 It reports errors without interrupting in case of write-permission or similar issues. Please also be aware that folders targeted by the script are *completely* removed without analyzing their internal content whatsoever.
 
-WARNING!: The author may not be held responsible for accidental deletion/removal of filesystem objects-
+*WARNING!:* **The author may not be held responsible for accidental/unwanted deletion and/or corruption of filesystem objects, applications, procedures or whole systems as consequences of the use of this tool.**
