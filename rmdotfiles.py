@@ -9,7 +9,7 @@
 ##  Copyright (C) 2017 Walter Arrighetti        ##
 ##  coding by: Walter Arrighetti, PhD, CISSP    ##
 ##################################################
-_version = "0.7"
+_version = "0.8"
 import os
 import sys
 import time
@@ -22,7 +22,7 @@ ExcludeFolders = frozenset([
 ExcludeFiles = frozenset([
 ])
 DotFolders = frozenset([
-	".Trashes",".Trash-root",".Trash-0",".Trash-guest",".DS_Store",".hccache",".syncing_db"
+	".Trashes",".Trash-root",".Trash-0",".Trash-guest",".DS_Store",".hccache",".syncing_db",#".@__thumb",
 	".Spotlight-V100",".fseventsd",".TemporaryItems",
 	"$RECYCLE.BIN","$Recycle.Bin","$$PendingFiles"#,"Recycled","RECYCLER"
 ])
@@ -125,16 +125,13 @@ for root, dirs, files in os.walk(basepath):
 		elif fnmatch.fnmatch(dir,".Trash-[0-9]{3,4}") or fnmatch.fnmatch(dir,"F[oO][uU][nN][dD].[0-9][0-9][0-9]"):	markforremoval = True
 		if markforremoval:
 			targetdir = os.path.join(root,dir)
-			print targetdir+'/'
 			try:
-				result = shutil.rmtree(targetdir)
-				if result==False:	raise IOException
-				elif result==True:	deleteddirs += 1
-				else:	
-					deletedfiles += result[0]
-					deleteddirs += result[1]
-					deletedsize += result[2]
-					if dir in DotFolders:	dotdircount[dir] += 1
+				shutil.rmtree(targetdir)
+				#else:	
+				#	deletedfiles += result[0]
+				#	deleteddirs += result[1]
+				#	deletedsize += result[2]
+				if dir in DotFolders:	dotdircount[dir] += 1
 			except:
 				errordirs += 1
 				print "\n Unable to remove folder \"%s\"."%targetdir,
