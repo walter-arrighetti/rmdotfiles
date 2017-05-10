@@ -36,57 +36,6 @@ DotFileExts = frozenset([
 	"exr","dpx","tif","tiff","ari","mov","mxf","wav","doc","docx","htm","html"
 ])
 
-def sizeprint(mag, SI=True, decimaldigits=-1, separated=False):
-	size, prefix = float(mag), ''
-	if SI:
-		if size > 1000000000000000L:
-			size /= 1000000000000000L
-			prefix='P'
-		elif size > 1000000000000L:
-			size /= 1000000000000L
-			prefix='T'
-		elif size > 1000000000:
-			size /= 1000000000
-			prefix='G'
-		elif size > 1000000:
-			size /= 1000000
-			prefix='M'
-		elif size > 1024:
-			size /= 1000
-			prefix='k'
-	else:
-		if size > 1125899906842624L:
-			size /= 1125899906842624L
-			prefix='Pi'
-		elif size > 1099511627776L:
-			size /= 1099511627776L
-			prefix='Ti'
-		elif size > 1073741824L:
-			size /= 1073741824L
-			prefix='Gi'
-		elif size > 1048576:
-			size /= 1048576
-			prefix='Mi'
-		elif size > 2047:
-			size /= 1024
-			prefix='ki'
-	if decimaldigits<=0:
-		if size%1==0 or decimaldigits==0:
-			if separated:	return (str(int(size)), prefix)
-			else:	return "%d%s"%(int(size),prefix)
-		else:
-			if prefix in ['M','Mi']:
-				if separated:	return ("%.01f"%size, prefix)
-				else:	return ("%.01f%s"%(size,prefix))
-			elif prefix in ['k','ki']:
-				if separated:	return (str(int(math.ceil(size))), prefix)
-				else:	return ("%d%s"%(int(math.ceil(size)),prefix))
-			else:
-				if separated:	return ("%.02f"%size, prefix)
-				else:	return ("%.02f%s"%(size,prefix))
-	if separated:	return (("%%.%df%"%decimaldigits)%size, prefix)
-	else:	return (("%%.%df%%s"%decimaldigits)%(size,prefix))
-
 
 print "RmDotFiles systematic \"dot-files\" and 'Apple-doubles' removal tool v%s"%_version
 print "Copyright (C) 2017 Walter Arrighetti, PhD, CISSP.\n"
@@ -116,7 +65,6 @@ dotfilecount, dotdircount = {".*":0}, {}
 for key in DotFiles:	dotfilecount[key] = 0
 for key in DotFolders:	dotdircount[key] = 0
 
-#from os.path import join, getsize
 for root, dirs, files in os.walk(basepath):
 	for dir in dirs:
 		markforremoval = False
@@ -127,10 +75,6 @@ for root, dirs, files in os.walk(basepath):
 			targetdir = os.path.join(root,dir)
 			try:
 				shutil.rmtree(targetdir)
-				#else:	
-				#	deletedfiles += result[0]
-				#	deleteddirs += result[1]
-				#	deletedsize += result[2]
 				if dir in DotFolders:	dotdircount[dir] += 1
 			except:
 				errordirs += 1
@@ -162,7 +106,6 @@ for root, dirs, files in os.walk(basepath):
 				errorfiles += 1
 				print "\n Unable to remove file \"%s\"."%targetfile,
 print '\r'+(' '*78)+"\r"
-#time.strftime("%Y%m%d-%H%M")
 if (not deletedfiles) and (not deleteddirs) and (not deletedsize):	
 	print "No filesystem objects were deleted from \"%s\"."%basepath
 	if log: log.write("[RmDotFiles] %s:\tNo filesystem objects were deleted.\r\n"%time.strftime("%Y%m%d-%H%M"))
