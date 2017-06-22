@@ -9,7 +9,7 @@
 ##  Copyright (C) 2017 Walter Arrighetti        ##
 ##  coding by: Walter Arrighetti, PhD, CISSP    ##
 ##################################################
-_version = "0.8"
+_version = "0.9"
 import os
 import sys
 import time
@@ -83,7 +83,7 @@ for root, dirs, files in os.walk(basepath):
 		markforremoval = False
 		if file in ExcludeFiles:	continue
 		elif file in DotFiles:	markforremoval = True
-		elif fnmatch.fnmatch(file,"._*"):	markforremoval = True
+		elif fnmatch.fnmatch(file,"._*") and not file.startswith("._Icon"):	markforremoval = True
 		elif file[0]=='.' and len(file) > 1:
 			for syntax in DotFileSyntaxes:
 				if fnmatch.fnmatch(file[1:],syntax):
