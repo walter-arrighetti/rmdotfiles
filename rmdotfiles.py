@@ -27,7 +27,7 @@ DotFolders = frozenset([
 	"$RECYCLE.BIN","$Recycle.Bin","$$PendingFiles"#,"Recycled","RECYCLER"
 ])
 DotFiles = frozenset([
-	".DS_Store",".desktop",".Desktop",".Thumbs.db",".dustbust-data","._.Trashes","._.DS_Store",
+	".DS_Store","_DS_Store",".desktop",".Desktop",".Thumbs.db",".dustbust-data","._.Trashes","._.DS_Store",
 	"Thumbs.db",
 ])
 DotFileSyntaxes = frozenset([
