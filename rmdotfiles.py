@@ -28,7 +28,7 @@ DotFolders = frozenset([
 ])
 DotFiles = frozenset([
 	".DS_Store","_DS_Store",".desktop",".Desktop",".Thumbs.db",".dustbust-data","._.Trashes","._.DS_Store",
-	"Thumbs.db",
+	"Thumbs.db","desktop.ini",
 ])
 DotFileSyntaxes = frozenset([
 ])
@@ -37,30 +37,30 @@ DotFileExts = frozenset([
 ])
 
 
-print "RmDotFiles systematic \"dot-files\" and 'Apple-doubles' removal tool v%s"%_version
-print "Copyright (C) 2017 Walter Arrighetti, PhD, CISSP.\n"
+print("RmDotFiles systematic \"dot-files\" and 'Apple-doubles' removal tool v%s"%_version)
+print("Copyright (C) 2017 Walter Arrighetti, PhD, CISSP.\n")
 
 if len(sys.argv) not in [2,3] or not os.path.isdir(sys.argv[1]):
-	print "\n * SYNTAX:\tRmDotFiles  basepath  [logfile]\n"
-	print """            Removes 'dot-files' and macOS 'Apple "doubles"' from a subtree structure.
+	print("\n * SYNTAX:\tRmDotFiles  basepath  [logfile]\n")
+	print("""            Removes 'dot-files' and macOS 'Apple "doubles"' from a subtree structure.
             Some folders and files are always left in place (like critical filesystem     
             objects like "System Volume Information" or "@Recycle" folders). Some objects 
             are instead *always* removed (like ".Trash-*" folders or ".DS_Store" files),  
             plus all dotfiles starting with '._' and *some* files just starting with ".". 
             The user starting this tool must have permissions to write/delete the objects.
-            An optional logfile can be used to record the script actions."""
-	print '\n',
+            An optional logfile can be used to record the script actions.""")
+	print('\n')
 	sys.exit(-9)
 basepath, log = os.path.abspath(sys.argv[1]), False
 if len(sys.argv)==3:
 	logfile = os.path.abspath(sys.argv[2])
 	try:	log = open(logfile,"a")
 	except:
-		print " * ERROR: Unable to append to logfile \"%s\"."%logfile
+		print(" * ERROR: Unable to append to logfile \"%s\"."%logfile)
 		sys.exit(-2)
-print "Analyzing directory structure under \"%s\"....."%basepath,
-deletedfiles, deleteddirs, deletedsize = 0,0,0L
-errorfiles, errordirs, errorsize = 0,0,0L
+print("Analyzing directory structure under \"%s\"....."%basepath)
+deletedfiles, deleteddirs, deletedsize = 0,0,0
+errorfiles, errordirs, errorsize = 0,0,0
 dotfilecount, dotdircount = {".*":0}, {}
 for key in DotFiles:	dotfilecount[key] = 0
 for key in DotFolders:	dotdircount[key] = 0
@@ -78,7 +78,7 @@ for root, dirs, files in os.walk(basepath):
 				if dir in DotFolders:	dotdircount[dir] += 1
 			except:
 				errordirs += 1
-				print "\n Unable to remove folder \"%s\"."%targetdir,
+				print("\n Unable to remove folder \"%s\"."%targetdir)
 	for file in files:
 		markforremoval = False
 		if file in ExcludeFiles:	continue
@@ -104,23 +104,23 @@ for root, dirs, files in os.walk(basepath):
 			except:
 				errorsize += targetsize
 				errorfiles += 1
-				print "\n Unable to remove file \"%s\"."%targetfile,
-print '\r'+(' '*78)+"\r"
+				print("\n Unable to remove file \"%s\"."%targetfile)
+print('\r'+(' '*78)+"\r")
 if (not deletedfiles) and (not deleteddirs) and (not deletedsize):	
-	print "No filesystem objects were deleted from \"%s\"."%basepath
+	print("No filesystem objects were deleted from \"%s\"."%basepath)
 	if log: log.write("[RmDotFiles] %s:\tNo filesystem objects were deleted.\r\n"%time.strftime("%Y%m%d-%H%M"))
 else:
 	outstr = "Purged %d files and %d folders (%0.2f GiB) from \"%s\"."%(deletedfiles,deleteddirs,float(deletedsize)/(1024*1024*1024),basepath)
-	print outstr
+	print(outstr)
 	if log: log.write("[RmDotFiles] %s:\t%s\r\n"%(time.strftime("%Y%m%d-%H%M"),outstr))
 	for key in DotFolders:
-		if dotdircount[key]:	print 'Deleted %d "%s" folders.'%(dotdircount[key],key)
+		if dotdircount[key]:	print('Deleted %d "%s" folders.'%(dotdircount[key],key))
 	for key in DotFiles:
-		if dotfilecount[key]:	print 'Deleted %d "%s" files.'%(dotfilecount[key],key)
-	if dotfilecount[".*"]:	print "Deleted %d other 'dot-files'."%dotfilecount[".*"]
+		if dotfilecount[key]:	print('Deleted %d "%s" files.'%(dotfilecount[key],key))
+	if dotfilecount[".*"]:	print("Deleted %d other 'dot-files'."%dotfilecount[".*"])
 if errorfiles or errordirs:
 	outstr = "Note: %d files and %d folders (%0.2f GiB) could NOT be deleted.\n"%(errorfiles, errordirs,float(errorsize)/(1024*1024*1024))
-	print outstr
+	print(outstr)
 	if log: log.write("[RmDotFiles] %s:\t%s\r\n"%(time.strftime("%Y%m%d-%H%M"),outstr))
 
 if log:	log.close()
