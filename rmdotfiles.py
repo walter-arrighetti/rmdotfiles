@@ -28,7 +28,7 @@ DotFolders = frozenset([
 ])
 DotFiles = frozenset([
 	".DS_Store","_DS_Store",".desktop",".Desktop",".Thumbs.db",".dustbust-data","._.Trashes","._.DS_Store",
-	"Thumbs.db",
+	"Thumbs.db","desktop.ini",
 ])
 DotFileSyntaxes = frozenset([
 ])
